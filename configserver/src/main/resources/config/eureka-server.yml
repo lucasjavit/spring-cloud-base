@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: eureka-server
+  boot:
+    admin:
+      context-path: /admin
+server:
+  port: 8761
+
+eureka:
+  instance:
+    hostname: eurekaserver
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+  server:
+    wait-time-in-ms-when-sync-empty: 3000
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+#
+#logging:
+#  level:
+#  com.netflix: WARN
+#  org.springframework.web: WARN
+#  com.optimagrowth: DEBUG

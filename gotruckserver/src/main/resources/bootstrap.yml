@@ -1,0 +1,45 @@
+server:
+  port: 8074
+
+resource:
+  name: truck
+
+spring:
+  application:
+    name: gotruck-sever
+  profiles:
+    active: dev
+  cloud:
+    config:
+      uri: http://configservice:8071
+    gateway:
+      routes:
+        - id: truck
+          uri: http:/${spring.application.name}:${server.port}/${resource.name}
+          predicates:
+            Path=/truck/**
+          filters:
+            TokenRelay=
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: "http://keycloak:8080/auth/realms/spring_auth"
+
+          # the current backend is configured to be used as a resource server
+          # then, I must indicate the URI of the backend-auth to be used and which token to be used
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://eurekaserver:8761/eureka/
+    registerWithEureka: true
+    fetch-registry: true
+  instance:
+    preferIpAddress: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
