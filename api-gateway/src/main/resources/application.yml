@@ -1,0 +1,29 @@
+server:
+  port: 8083
+
+spring:
+  application.name: backend-gateway-client
+  cloud:
+    gateway:
+      routes:
+        - id: resources
+          uri: http://localhost:807/truck
+          predicates:
+            Path=/truck/**
+          filters:
+            TokenRelay=
+
+  security:
+    oauth2:
+      client:
+        registration:
+          gateway:
+            provider: truck_go
+            client-id: truck_go
+            client-secret: kZVlXsCxWhNCMpIKjeMDYEfc5SDXOoKL
+            authorization-grant-type: authorization_code
+            redirect-uri: "http://localhost:8083/login/oauth2/code/{registrationId}"
+            scope: openid, message.read
+        provider:
+          my-provider:
+            issuer-uri: http://localhost:8080/auth/realms/truckgo
